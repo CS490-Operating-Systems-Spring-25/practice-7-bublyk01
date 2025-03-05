@@ -1,0 +1,47 @@
+.section .bss
+    .align 8
+buffer: 
+    .skip 256
+
+.section .data   // section with initialized variables 
+  message:      // variable with null-terminated string(.asciz will add \0 automatically)
+    .asciz "Directory path:\n"
+  n:
+    .asciz "\n"
+
+.section .text
+  .global _start
+
+  _start:
+    ldr x0, =buffer //buffer
+    mov x1, #256
+    mov x8, #17
+    svc #0
+
+    mov x0, #1 //message output
+    ldr x1, =message
+    mov x2, #15
+    mov x8, #64
+    svc #0
+
+    mov x0, #1 //path output
+    ldr x1, =buffer
+    mov x2, #256
+    mov x8, #64
+    svc #0
+
+    mov x0, #1 //newline character
+    ldr x1, =n
+    mov x2, #1
+    mov x8, #64
+    svc #0
+
+    mov x8, #93 //exit
+    mov x0, #1
+    svc #0
+
+
+
+
+
+
